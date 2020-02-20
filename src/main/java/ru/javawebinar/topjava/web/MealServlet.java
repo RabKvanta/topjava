@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
 import static org.slf4j.LoggerFactory.getLogger;
@@ -36,7 +37,9 @@ public class MealServlet extends HttpServlet {
                 LocalDateTime.parse(request.getParameter("dateTime")),
                 request.getParameter("description"),
                 Integer.valueOf(request.getParameter("calories")));
-
+        log.info(meal.isNew() ? "Create {}" : "Update {}", meal);
+        repository.save(meal);
+        response.sendRedirect("meals");
     }
 
 
@@ -46,7 +49,8 @@ public class MealServlet extends HttpServlet {
         if (action == null) {
             log.debug("getAll");
             // response.sendRedirect("meals.jsp");
-            request.setAttribute("meals", MealsUtil.getWithExceeded(MealsUtil.MEALS, 2000));
+          //  request.setAttribute("meals", MealsUtil.getWithExceeded(MealsUtil.MEALS, 2000));
+            request.setAttribute("meals", MealsUtil.getWithExceeded(repository.getAll(), 2000));
             request.getRequestDispatcher("/meals.jsp").forward(request, response);
         } else if (action.equals("delete")) {
             int id = getId(request);
