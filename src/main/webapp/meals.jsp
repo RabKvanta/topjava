@@ -34,7 +34,7 @@
         <th>Calories</th>
     </tr>
 
-    <c:forEach items="${meals}" var="meal">
+    <c:forEach items="${requestScope.meals}" var="meal">
         <jsp:useBean id="meal" scope="page" type="ru.javawebinar.topjava.model.MealTo"/>
         <tr class=${meal.excess?"exceeded":"normal"}>
             <td><%=TimeUtil.toString(meal.getDateTime())%></td>
